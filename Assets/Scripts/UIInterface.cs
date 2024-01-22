@@ -5,7 +5,11 @@ using UnityEngine;
 public class UIInterface : MonoBehaviour
 {
     private GameObject focusObj;
-    public GameObject cubeTurret;
+    private GameObject itemPrefab;
+    
+    public GameObject rocketTurret;
+    public GameObject gattlingTurret;
+    
     
     void Start()
     {
@@ -17,27 +21,27 @@ public class UIInterface : MonoBehaviour
     {
         // control for mobile devices
         /*
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)               ********
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);                 ********
             if (!Physics.Raycast(ray, out hit))
                 return;
             focusObj = Instantiate(cubeTurret, hit.point, cubeTurret.transform.rotation);
             focusObj.GetComponent<Collider>().enabled = false;
         }
-        else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)          ********
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);                 ********
             if (!Physics.Raycast(ray, out hit))
                 return;
             focusObj.transform.position = hit.point + new Vector3(0,1,0);
         }
-        else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        else if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended)          ********
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);                 ********
             if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Platform") && hit.normal.Equals(new Vector3(0,1,0)))
             {
                 hit.collider.gameObject.tag = "Occupied";
@@ -55,12 +59,14 @@ public class UIInterface : MonoBehaviour
             // control for pc 
             if (Input.GetMouseButtonDown(0))
             {
+                /* no need anymore
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out hit))
                     return;
                 focusObj = Instantiate(cubeTurret, hit.point, cubeTurret.transform.rotation);
                 focusObj.GetComponent<Collider>().enabled = false;
+                */
             }
             else if (focusObj && Input.GetMouseButton(0))
             {
@@ -88,4 +94,27 @@ public class UIInterface : MonoBehaviour
                 focusObj = null;
         }
     }
+
+    public void CreateRocket()
+    {
+        itemPrefab = rocketTurret;
+        CreateItemForButton();
+    }
+
+    public void CreateGattling()
+    {
+        itemPrefab = gattlingTurret;
+        CreateItemForButton();
+    }
+
+    public void CreateItemForButton()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out hit))
+            return;
+        focusObj = Instantiate(itemPrefab, hit.point, itemPrefab.transform.rotation);
+        focusObj.GetComponent<Collider>().enabled = false;
+    }
+    
 }
