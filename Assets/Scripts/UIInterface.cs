@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UIInterface : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class UIInterface : MonoBehaviour
     
     public GameObject rocketTurret;
     public GameObject gattlingTurret;
+    public GameObject flamerTurret;
+
+    public GameObject turretMenu;
     
     
     void Start()
@@ -59,14 +64,16 @@ public class UIInterface : MonoBehaviour
             // control for pc 
             if (Input.GetMouseButtonDown(0))
             {
-                /* no need anymore
+                if (EventSystem.current.IsPointerOverGameObject())return;
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out hit))
-                    return;
-                focusObj = Instantiate(cubeTurret, hit.point, cubeTurret.transform.rotation);
-                focusObj.GetComponent<Collider>().enabled = false;
-                */
+                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.CompareTag("Turret"))
+                {
+                    turretMenu.transform.position = Input.mousePosition;
+                    turretMenu.SetActive(true);
+                }
+                
+                
             }
             else if (focusObj && Input.GetMouseButton(0))
             {
@@ -85,6 +92,8 @@ public class UIInterface : MonoBehaviour
                     hit.collider.gameObject.tag = "Occupied";
                     focusObj.transform.position = new Vector3(hit.collider.gameObject.transform.position.x,
                         focusObj.transform.position.y, hit.collider.gameObject.transform.position.z);
+                    
+                    focusObj.GetComponent<Collider>().enabled = true;
                 }
                 else
                 {
@@ -107,6 +116,13 @@ public class UIInterface : MonoBehaviour
         CreateItemForButton();
     }
 
+    public void CreateFlamer()
+    {
+        itemPrefab = flamerTurret;
+        CreateItemForButton();
+    }
+    
+
     public void CreateItemForButton()
     {
         RaycastHit hit;
@@ -115,6 +131,11 @@ public class UIInterface : MonoBehaviour
             return;
         focusObj = Instantiate(itemPrefab, hit.point, itemPrefab.transform.rotation);
         focusObj.GetComponent<Collider>().enabled = false;
+    }
+
+    public void CloseMenu()
+    {
+        turretMenu.SetActive(false);
     }
     
 }
