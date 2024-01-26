@@ -72,16 +72,13 @@ public class UIInterface : MonoBehaviour
                     turretMenu.transform.position = Input.mousePosition;
                     turretMenu.SetActive(true);
                 }
-                
-                
             }
             else if (focusObj && Input.GetMouseButton(0))
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out hit))
-                    return;
-                focusObj.transform.position = hit.point;
+                if (Physics.Raycast(ray, out hit))
+                    focusObj.transform.position = hit.point;
             }
             else if (focusObj && Input.GetMouseButtonUp(0))
             {
@@ -93,7 +90,8 @@ public class UIInterface : MonoBehaviour
                     focusObj.transform.position = new Vector3(hit.collider.gameObject.transform.position.x,
                         focusObj.transform.position.y, hit.collider.gameObject.transform.position.z);
                     
-                    focusObj.GetComponent<Collider>().enabled = true;
+                    focusObj.GetComponent<BoxCollider>().enabled = true;
+                    focusObj.GetComponent<SphereCollider>().enabled = true;
                 }
                 else
                 {
